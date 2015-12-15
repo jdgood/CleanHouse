@@ -1,23 +1,24 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
-public class TimeManager : MonoBehaviour {
+/* Updates the timer in the UI and will fire off the lose condition if time runs out. */
+public class TimeManager : MonoBehaviour
+{
     public float gameTime = 10f;
     public float restartTimer = 5f;
     public Animator anim;
 
     Text text;
     
-
-	// Use this for initialization
-	void Start () {
+	void Start()
+    {
         text = GetComponent<Text>();
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	// Update timer and check if game is lost. If game is lost then wait for the restart timer to restart the game
+	void Update()
+    {
         gameTime -= Time.deltaTime;
         text.text = "Time Remaining: " + ((int)gameTime);
 
@@ -29,7 +30,6 @@ public class TimeManager : MonoBehaviour {
             if(restartTimer < 0)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-                //Application.LoadLevel(Application.loadedLevel);
             }
         }
     }

@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class LegoController : MonoBehaviour {
+/* Attaches to the lego pieces that can be picked
+   Handles all the logic involved with picking up and dropping the lego pieces*/
+public class LegoController : MonoBehaviour
+{
     public float size = .25f;
     public bool stuckToPlayer = false;
 
@@ -13,9 +15,8 @@ public class LegoController : MonoBehaviour {
     Vector3 originalPosition;
     Quaternion originalRotation;
 
-
-    // Use this for initialization
-    void Start () {
+    void Start()
+    {
         player = GameObject.FindGameObjectWithTag("Player");
         playerLogic = player.GetComponent<PlayerLogic>();
         playerRigidbody = player.GetComponent<Rigidbody>();
@@ -30,17 +31,18 @@ public class LegoController : MonoBehaviour {
         PlayerLogic.damageCoolDownTimer -= Time.deltaTime;
     }
 
+    //Detects that the player or a piece stuck to the player made contact with a brick in the world
     void OnTriggerEnter(Collider other)
     {
         LegoController lc = other.gameObject.GetComponent<LegoController>();
-        //check if player or object stuck to player
+        //check if the colliding object is the player or an object stuck to player
         if (other.gameObject == player || (lc != null && lc.stuckToPlayer == true))
         {
-            //check if ball is big enough to pick
             //Debug.Log("My size: " + playerLogic.size + " Lego Size: " + size + " Ratio: " + size / playerLogic.pickupRatio + " Speed: " + playerRigidbody.velocity.magnitude);
-            if (size/playerLogic.pickupRatio <= playerLogic.size)
+            //check if ball is big enough to pick up this brick
+            if(size/playerLogic.pickupRatio <= playerLogic.size)
             {
-                //attach
+                //attach to player
                 transform.parent = player.transform;
                 stuckToPlayer = true;
                 trigger.isTrigger = false;
@@ -50,9 +52,9 @@ public class LegoController : MonoBehaviour {
             {
                 LegoController[] children = player.GetComponentsInChildren<LegoController>();
                 //knock brick off if you hit something too big to pick up at a high speed
-                if (PlayerLogic.damageCoolDownTimer < 0 && children.Length > 0 && playerRigidbody.velocity.magnitude > 1.5)
+                if(PlayerLogic.damageCoolDownTimer < 0 && children.Length > 0 && playerRigidbody.velocity.magnitude > 1.5)
                 {
-                    //randomly knock something off causes floating bricks so just going to remove last picked up instead
+                    //randomly knocking something off causes floating bricks so just going to remove last picked up instead
                     //children[Random.Range(0, children.Length)].Detach();
                     children[children.Length - 1].Detach();
                     PlayerLogic.damageCoolDownTimer = PlayerLogic.COOL_DOWN_LIMIT;
@@ -61,9 +63,9 @@ public class LegoController : MonoBehaviour {
         }
     }
 
+    //Detaches and puts brick back at its spawn point, also remove it's size from players
     public void Detach()
     {
-        Debug.Log("Detaching");
         transform.parent = pickups.transform;
         transform.position = originalPosition;
         transform.rotation = originalRotation;
