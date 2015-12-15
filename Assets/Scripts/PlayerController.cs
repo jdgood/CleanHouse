@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     public float cameraSpeed = 5f;
     public float speed = 6f;
-    public float vertSpeed = 5f;
+    public float vertSpeed = 1f;
     public Transform cameraTransform;
 
     Rigidbody playerRigidBody;
@@ -16,13 +16,11 @@ public class PlayerController : MonoBehaviour
     float driftX = 0f;
     float driftY = 0f;
 
-    //Commented out cursor and lock and visibility due to it not working nice within the unity editor (probably made more for an executable I assume)
+    //Commented out cursor lock and visibility due to it not working nice within the unity editor (probably made more for an executable I assume)
     void Start()
     {
         playerRigidBody = GetComponent<Rigidbody>();
         playerLogic = GetComponent<PlayerLogic>();
-        //Cursor.lockState = CursorLockMode.Confined;
-        //Cursor.visible = false;
         fingerDown = -Vector2.one;
         followDistance = cameraTransform.position - transform.position;
     }
@@ -45,22 +43,13 @@ public class PlayerController : MonoBehaviour
         //Jump if spacebar is hit and if y velocity is minimal (sphere is in air after it picks up stuff and is a little bouncy, thats why I did it this way)
         if(Input.GetKeyDown("space") && playerRigidBody.velocity.y > -.5 && playerRigidBody.velocity.y < .5)
         {
-            jump = playerLogic.size + vertSpeed;
+            jump = playerLogic.size/2 + vertSpeed;
             playerRigidBody.AddForce(0f, jump, 0f, ForceMode.VelocityChange);
         }
-        /*if(Input.GetKeyDown("escape"))
+        if(Input.GetKeyDown("escape"))
         {
-            if(Cursor.lockState == CursorLockMode.Confined)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.Confined;
-                Cursor.visible = false;
-            }
-        }*/
+            Application.Quit();
+        }
         //Cheat key to instawin the game
         if(Input.GetKeyDown("c"))
         {
@@ -92,16 +81,13 @@ public class PlayerController : MonoBehaviour
             }
             //Calculate the total drift of a complete movement to see if this was a tap (could have been done with a timer too)
             else if(firstFinger.phase == TouchPhase.Ended && fingerDown.x >= 0) 
-            { 
-                Vector2 fingerUp = firstFinger.position;        
-                float x = fingerUp.x - fingerDown.x;
-                float y = fingerUp.y - fingerDown.y;
+            {
                 fingerDown.x = -1;
 
                 //considering this a tap (jump input) since minimal movement
                 if (driftX < 100 && driftY < 100) 
                 {
-                    jump = playerLogic.size + vertSpeed;
+                    jump = playerLogic.size/2 + vertSpeed;
                     playerRigidBody.AddForce(0f, jump, 0f, ForceMode.VelocityChange);
                 }
             }

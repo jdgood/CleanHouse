@@ -20,11 +20,15 @@ Bonus Features (and why I added them):
 		-Allows the game to reach both web and mobile audiences! More eyes on the game!
 		-Controls could use some tuning, didnt have time to get USB debugging setup on my PC, so iterating was a
 			little rough
+	Tool
+		-Counts legos on the scene, can be extended to help with balancing by giving it expected ratios
+			between the different types of pickup sizes
 
 PC Controls:
 	WASD for movement
 	Mouse to aim camera
 	Space to jump
+	Escape to exit game
 
 Mobile Controls:
 	Swipe screen to move camera
@@ -33,6 +37,12 @@ Mobile Controls:
 
 Time Spent: 
 	~7 hours
+	
+Room for improvement:
+	-Make it so that the overall form of the ball doesnt stretchout too far without maintaining
+		a spherical shape
+	-Dynamic camera that will stretch out as your sphere grow
+	-Block camera from clipping through geometry
 
 PS:
 	I felt like this was a pretty solid 60/40 combination of a design/engineering task, which made it a
